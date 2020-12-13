@@ -24,6 +24,13 @@ class AoC():
             else:
                 self.busses.append(0)
 
+    def lcm(self, numbers: [int]) -> int:
+        """Only valid for array of prime numbers"""
+        result = 1
+        for number in numbers:
+            result *= number
+        return result
+
     def Task1(self) -> int:
         waitTimes = {}
         for bus in self.busses:
@@ -37,30 +44,24 @@ class AoC():
         return sortedTimes[0][0] * sortedTimes[0][1]
 
     def Task2(self, offset=0) -> int:
-        firstBus = self.busses[0]
-        lastBus = self.busses[-1]
-        deltaT = len(self.busses) - 1
-        uniqueBusses = set(self.busses)
-        if 0 in uniqueBusses:
-            uniqueBusses.remove(0)
-        nrOfBusses = len(uniqueBusses)
+
+        actualBusses = [x for x in enumerate(self.busses) if x[1] != 0]
 
         t = offset - offset % self.busses[0]
         increment = self.busses[0]
 
-        while True:
-            if (t % firstBus) == 0 and (t + deltaT) % lastBus == 0:
-                correct = 0
-                for i, bus in enumerate(self.busses):
-                    if bus != 0:
-                        if ((t + i) % bus) == 0:
-                            correct += 1
+        for i in range(len(actualBusses) - 1):
+            while True:
+                currentBus = actualBusses[i]
+                nextBus = actualBusses[i + 1]
+                tCurrentBus = t + currentBus[0]
+                tNextBus = t + nextBus[0]
+                if (tCurrentBus % currentBus[1]) == 0 and tNextBus % nextBus[1] == 0:
+                    increment = self.lcm([x[1] for x in actualBusses[:i+2]])
+                    break
+                t += increment
 
-                if correct == nrOfBusses:
-                    return t
-            t += increment
-
-        return -1
+        return t
 
     def Run(self, filename):
         self.ParseInput(filename)
