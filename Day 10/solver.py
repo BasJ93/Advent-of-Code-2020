@@ -1,4 +1,4 @@
-import re
+from collections import defaultdict
 
 class AoC():
     def __init__(self):
@@ -38,7 +38,19 @@ class AoC():
         return delta1 * delta3
 
     def Task2(self) -> int:
-        pass
+        inOrder = sorted(self.data)
+        inOrder = [0] + inOrder + [inOrder[-1] + 3]
+
+        paths = defaultdict(int)
+        paths[0] = 1
+
+        for adapter in inOrder:
+            for diff in range(1, 4):
+                next_adapter = adapter + diff
+                if next_adapter in inOrder:
+                    paths[next_adapter] += paths[adapter]
+
+        return paths[inOrder[-1]]
 
     def Run(self, filename):
         self.ParseInput(filename)
