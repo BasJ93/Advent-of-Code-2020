@@ -4,7 +4,7 @@ class Seat():
         self.state = state
         self.occupiedNeighbors = 0
 
-    def getNeighbors(self, _map):
+    def getNeighbors(self, _map: [Seat]):
         neighbors = []
 
         for pos in [(x, y) for x in range(-1, 2) for y in range(-1, 2)]:
@@ -36,7 +36,7 @@ class Seat():
         return hash(self.position)
 
 class Seat2(Seat):
-    def getVisbleSeats(self, _map):
+    def getVisbleSeats(self, _map: [Seat2]):
         neighbors = []
 
         for pos in [(x, y) for x in range(-1, 2) for y in range(-1, 2)]:
